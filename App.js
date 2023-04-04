@@ -1,20 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler";
+import React from "react";
+// import { StyleSheet, Image } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 
-export default function App() {
+const Stack = createStackNavigator();
+
+import Home from "./Components/Home";
+import CameraComponent from "./Components/CameraComponent";
+
+function MyStack() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Stack.Navigator
+      screenOptions={{
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        headerTransparent: true,
+      }}>
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          title: "Skin Disease Classifier",
+        }}
+      />
+      <Stack.Screen
+        name="Camera"
+        options={{
+          title: "Capture",
+          headerTintColor: "#000",
+        }}
+        component={CameraComponent}
+      />
+    </Stack.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MyStack />
+    </NavigationContainer>
+  );
+}
