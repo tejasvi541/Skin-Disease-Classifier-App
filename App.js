@@ -8,6 +8,7 @@ const Stack = createStackNavigator();
 
 import Home from "./Components/Home";
 import CameraComponent from "./Components/CameraComponent";
+import Result from "./Components/Result";
 
 function MyStack() {
   return (
@@ -33,6 +34,14 @@ function MyStack() {
           headerTintColor: "#000",
         }}
         component={CameraComponent}
+      />
+      <Stack.Screen
+        name="Result"
+        options={{
+          title: "Result of the image",
+          headerTintColor: "#000",
+        }}
+        component={Result}
       />
     </Stack.Navigator>
   );

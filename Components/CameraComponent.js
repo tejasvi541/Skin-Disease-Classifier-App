@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Image,
+  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 import { Camera } from "expo-camera";
-
-const CameraComponent = () => {
+import CameraSVG from "../assets/CameraSVG.svg";
+import CameraRotate from "../assets/CameraRotate.svg";
+const CameraComponent = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
@@ -25,6 +25,10 @@ const CameraComponent = () => {
     if (camera) {
       const data = await camera.takePictureAsync(null);
       setImage(data.uri);
+      navigation.navigate("Result", {
+        capture: data.uri,
+        answer: "result",
+      });
     }
   };
   if (hasCameraPermission === false) {
@@ -32,33 +36,45 @@ const CameraComponent = () => {
   }
   return (
     <View style={styles.topWrapper}>
-      <View style={styles.cameraContainer}>
-        <Camera
-          ref={(ref) => setCamera(ref)}
-          style={styles.fixedRatio}
-          type={type}
-          ratio={"1:1"}
-        />
-      </View>
-      <TouchableOpacity
-        style={styles.pictureButton}
-        title="Flip Image"
-        onPress={() => {
-          setType(
-            type === Camera.Constants.Type.back
-              ? Camera.Constants.Type.front
-              : Camera.Constants.Type.back
-          );
-        }}>
-        <Text style={styles.appButtonText}>Flip Camera</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.pictureButton}
-        title="Take Picture"
-        onPress={() => takePicture()}>
-        <Text style={styles.appButtonText}>Take Picture</Text>
-      </TouchableOpacity>
-      {image && <Image source={{ uri: image }} style={{ flex: 1 }} />}
+      <ImageBackground
+        source={require("../assets/BackgroundImage.jpg")}
+        style={styles.backgroundImage}>
+        <View style={styles.cameraContainer}>
+          <Camera
+            ref={(ref) => setCamera(ref)}
+            style={styles.fixedRatio}
+            type={type}
+            ratio={"1:1"}
+          />
+        </View>
+        <View style={styles.iconWrapper}>
+          <TouchableOpacity
+            style={styles.pictureButton}
+            title="Flip Image"
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}>
+            <View>
+              <CameraRotate width={100} height={100} />
+              <Text style={styles.appButtonText}>Flip Camera</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.pictureButton}
+            title="Take Picture"
+            onPress={() => takePicture()}>
+            <View>
+              <CameraSVG width={100} height={100} />
+              <Text style={styles.appButtonText}>Take Pic</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        {/* {image && <Image source={{ uri: image }} style={{ flex: 1 }} />} */}
+      </ImageBackground>
     </View>
   );
 };
@@ -68,8 +84,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   cameraContainer: {
-    flex: 1,
-    flexDirection: "row",
+    width: 350,
+    height: 350,
+    marginTop: 80,
+    marginLeft: 30,
+    marginRight: 30,
+    padding: 10,
   },
   backgroundImage: {
     flex: 1,
@@ -78,8 +98,13 @@ const styles = StyleSheet.create({
   fixedRatio: {
     flex: 1,
     aspectRatio: 1,
+    borderStyle: "solid",
+    borderWidth: 5,
+    borderColor: "#65b7e0",
+    borderRadius: 10,
   },
   pictureButton: {
+    margin: 10,
     elevation: 8,
     backgroundColor: "#65b7e0",
     borderRadius: 10,
@@ -92,6 +117,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
+  },
+  iconWrapper: {
+    marginTop: 50,
+    marginLeft: 30,
+    marginRight: 30,
+    padding: 10,
+    alignSelf: "center",
   },
 });
 export default CameraComponent;
