@@ -23,7 +23,8 @@ const Result = ({ route, navigation }) => {
         {capture && (
           <Image source={{ uri: capture }} style={styles.imageContainer} />
         )}
-        <Text style={styles.resultText}>{answer}</Text>
+        <Text style={styles.resultText}>AI detected it as</Text>
+        <Text style={styles.resultText2}>{answer}</Text>
         <TouchableOpacity
           style={styles.backButton}
           title="Take Picture"
@@ -55,7 +56,17 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   resultText: {
-    margin: 30,
+    marginTop: 30,
+    marginLeft: 30,
+    marginRight: 30,
+    padding: 10,
+    fontSize: 25,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
+  },
+  resultText2: {
     padding: 10,
     fontSize: 25,
     color: "#fff",

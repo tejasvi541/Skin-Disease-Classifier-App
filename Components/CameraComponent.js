@@ -9,11 +9,14 @@ import {
 import { Camera } from "expo-camera";
 import CameraSVG from "../assets/CameraSVG.svg";
 import CameraRotate from "../assets/CameraRotate.svg";
+import axios from "axios";
+
 const CameraComponent = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [base64Image, setBase64Image] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -23,12 +26,27 @@ const CameraComponent = ({ navigation }) => {
   }, []);
   const takePicture = async () => {
     if (camera) {
-      const data = await camera.takePictureAsync(null);
-      setImage(data.uri);
-      navigation.navigate("Result", {
-        capture: data.uri,
-        answer: "result",
+      const data = await camera.takePictureAsync({
+        base64: true,
+        quality: 0.5,
       });
+      setImage(data.uri);
+
+      await axios
+        .post(" https://7af8-101-0-35-190.ngrok-free.app/predict/image", {
+          data: data.base64,
+        })
+        .then((res) => {
+          console.log(res);
+          navigation.navigate("Result", {
+            capture: data.uri,
+            answer: res.data[0],
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return err;
+        });
     }
   };
   if (hasCameraPermission === false) {

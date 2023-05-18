@@ -27,9 +27,18 @@ const Home = ({ navigation }) => {
                 fontSize: 24,
                 fontWeight: "bold",
                 color: "white",
-                paddingBottom: 100,
+                paddingBottom: 10,
               }}>
               Capture the Affected Area
+            </Text>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: "bold",
+                color: "white",
+                paddingBottom: 100,
+              }}>
+              AI will detect the disease for you !
             </Text>
             <TouchableOpacity
               style={styles.cameraButton}
